@@ -33,7 +33,7 @@ tr,td{
 				</ul>
 </div>
 <center>
-    
+
 <?php
 include "dbconfig.php";
 
@@ -80,7 +80,7 @@ while ($row1 = mysqli_fetch_array($result1)) {
                                 title: 'Appointment Today!',
                                 html: 'Date: ".$row1['DOV']."<br>Clinic: ".$row3['name']."-".$row3['town']."<br>Booked-On: ".$row1['Timestamp']."',
                                 icon: 'info',
-                                confirmButtonText: 'Close',
+                                confirmButtonText: 'Okay',
                                 showCancelButton: true,
                             }).then((result) => {
                                 if(result.isDismissed) {
