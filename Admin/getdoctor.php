@@ -8,21 +8,29 @@
 <body>
 <?php
 require_once("dbconfig.php");
-	$query ="SELECT distinct DID FROM doctor_availability WHERE CID = '" . $_POST["cid"] . "'";
-	$results = $conn->query($query);
+
+// Check if clinic value is set via POST
+if(isset($_POST["clinic"])) {
+    $clinic_id = $_POST["clinic"];
 ?>
-	<option value="">Select Doctor</option>
+    <option value="">Select Doctor</option>
 <?php
-	while($rs=$results->fetch_assoc()) {
-		$query1="Select distinct Name from doctor where DID=".$rs["DID"];
-		$result1=$conn->query($query1);
-		while($rs1=$result1->fetch_assoc())
-		{
+    // Fetch doctors associated with the selected clinic
+    $query1 = "SELECT DISTINCT d.did, d.name FROM doctor d JOIN clinic dc ON d.did = dc.cid WHERE dc.cid = '$clinic_id'";
+    $result1 = $conn->query($query1);
+    
+    // Check if query executed successfully
+    if ($result1) {
+        while($rs1 = $result1->fetch_assoc()) {
 ?>
-	<option value="<?php echo $rs["DID"]; ?>"><?php echo $rs["DID"].":".$rs1["Name"]; ?></option>
+            <option value="<?php echo $rs1["did"]; ?>"><?php echo $rs1["name"]; ?></option>
 <?php
-		}
+        }
+    } else {
+        echo "Error: " . $conn->error; // Output error if query fails
+    }
 }
 ?>
+
 </body>
 </html>

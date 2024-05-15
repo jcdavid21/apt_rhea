@@ -69,16 +69,18 @@ while ($row1 = mysqli_fetch_array($result1)) {
             echo "<td>" . $row1['Timestamp'] . "</td>";
             echo "</tr>";
             
-            // Check if the appointment date is equal to the current date
             $currentDate = date("Y-m-d");
-            if ($row1['DOV'] == $currentDate) {
+            $appointmentDate = $row1['DOV'];
+            $twoDaysBeforeAppointment = date("Y-m-d", strtotime("-2 days", strtotime($appointmentDate)));
+
+            if ($currentDate == $twoDaysBeforeAppointment || $currentDate == $appointmentDate) {
                 echo "<script>
-                        console.log('Appointment today:', ".$row1['DOV']." === ".$currentDate.");
+                        console.log('Appointment approaching:', '".$appointmentDate."');
                         $(document).ready(function() {
                             console.log('Document ready, triggering SweetAlert');
                             Swal.fire({
-                                title: 'Appointment Today!',
-                                html: 'Date: ".$row1['DOV']."<br>Clinic: ".$row3['name']."-".$row3['town']."<br>Booked-On: ".$row1['Timestamp']."',
+                                title: 'Appointment Reminder',
+                                html: 'Your appointment is scheduled for ".$appointmentDate." at ".$row3['name']."-".$row3['town']."<br>Booked-On: ".$row1['Timestamp']."',
                                 icon: 'info',
                                 confirmButtonText: 'Okay',
                                 showCancelButton: true,
@@ -102,7 +104,7 @@ while ($row1 = mysqli_fetch_array($result1)) {
                                 }
                             });
                         });
-                      </script>";
+                    </script>";
             }
 
             
